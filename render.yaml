@@ -1,0 +1,17 @@
+services:
+  - type: web
+    name: pinuyumayan-api
+    runtime: node
+    buildCommand: npm install && npx nest build
+    startCommand: node dist/main.js
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 3001
+      - key: DATABASE_URL
+        sync: false
+      - key: JWT_SECRET
+        sync: false
+      - key: CORS_ORIGIN
+        sync: false
