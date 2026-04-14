@@ -35,6 +35,10 @@ jobs:
         working-directory: universal-drone-app
         run: flutter pub get
 
+      - name: Generate code (freezed / json_serializable)
+        working-directory: universal-drone-app
+        run: dart run build_runner build --delete-conflicting-outputs
+
       - name: Analyze (non-blocking)
         working-directory: universal-drone-app
         run: flutter analyze --no-fatal-infos || true
@@ -61,4 +65,3 @@ jobs:
         run: |
           APK=build/app/outputs/flutter-apk/app-release.apk
           echo "APK size: $(du -sh $APK | cut -f1)"
-          echo "APK path: $APK"
