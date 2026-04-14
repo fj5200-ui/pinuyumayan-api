@@ -3,8 +3,30 @@ import { ValidationPipe } from '@nestjs/common';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import { IoAdapter } from '@nestjs/platform-socket.io';
 import { AppModule } from './app.module';
+import { drizzle } from 'drizzle-orm/postgres-js';
+import { migrate } from 'drizzle-orm/postgres-js/migrator';
+import postgres from 'postgres';
+import * as path from 'path';
+
+async function runMigrations() {
+  const url = process.env.DATABASE_URL;
+  if (!url) return;
+  const client = postgres(url, { max: 1, ssl: { rejectUnauthorized: false } });
+  const db = drizzle(client);
+  try {
+    console.log('Running database migrations...');
+    await migrate(db, { migrationsFolder: path.join(__dirname, '..', 'drizzle', 'migrations') });
+    console.log('Migrations complete.');
+  } catch (err) {
+    console.error('Migration error:', err);
+    throw err;
+  } finally {
+    await client.end();
+  }
+}
 
 async function bootstrap() {
+  await runMigrations();
   const app = await NestFactory.create(AppModule);
 
   // 全域 API 前綴
