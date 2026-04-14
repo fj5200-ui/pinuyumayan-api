@@ -78,10 +78,3 @@ flutter:
   assets:
     - assets/icons/
     - assets/map_tiles/
-
-  fonts:
-    - family: NotoSansTC
-      fonts:
-        - asset: assets/fonts/NotoSansTC-Regular.ttf
-        - asset: assets/fonts/NotoSansTC-Bold.ttf
-          weight: 700
